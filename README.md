@@ -176,10 +176,15 @@ and only then decide whether the findings are trustworthy enough to act on.
 Stated plainly, because they bound what the tool can claim:
 
 - **Shared-node attribution.** GPU samples identify a node, not a job. Where one
-  node hosts several GPU jobs, the reaper skips them rather than guess. Correct
-  attribution requires walking the Slurm cgroup hierarchy
-  (`/sys/fs/cgroup/.../slurm/uid_*/job_*/`) to map GPU PIDs back to job IDs.
-  That is deliberately out of scope here and is the subject of a companion tool.
+  node hosts several GPU jobs, the reaper skips them rather than guess, and
+  counts them in `gpu_reaper_skipped_shared_node_total`.
+
+  Correct attribution means walking the Slurm cgroup hierarchy to map GPU PIDs
+  back to jobs. **Note for Slurm 26.05 and later:** that hierarchy changed —
+  cgroup/v2 directories are now keyed off SLUID rather than JobId, so the
+  familiar `/sys/fs/cgroup/.../slurm/uid_*/job_*/` parse returns something that
+  is not a job ID. Any implementation has to handle both layouts. This is
+  deliberately out of scope here and is the subject of a companion tool.
 - **`nvidia-smi`, not DCGM.** Utilization is coarse: a kernel occupying one SM
   reports the same 100% as a saturated device. That is why *high* utilization is
   never treated as proof of health — only *low* utilization as evidence of a
