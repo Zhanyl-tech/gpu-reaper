@@ -1,0 +1,46 @@
+# Demo configuration — no cluster, no GPUs, no risk.
+#
+# The Slurm side is a fake `squeue` on PATH emitting the real pipe-delimited
+# format, so the parser exercised here is the production one. The GPU side is
+# the simulator playing a "hung" fleet: memory held, processes resident, zero
+# compute. That is the signature the policy engine should classify and escalate.
+
+mode: observe          # never anything else in the demo
+interval: 5s           # fast so the escalation is visible in under a minute
+metrics_addr: ":9835"
+log_format: text
+
+slurm:
+  source: squeue
+
+gpu:
+  source: simulator
+  simulator:
+    gpus: 8
+    scenario: hung     # try: healthy | idle | hung | starved | flaky
+    seed: 1
+
+thresholds:
+  util_pct: 15
+  mem_held_fraction: 0.05
+  idle_power_watts: 60
+  window: 60s          # compressed from the 20m production default
+  warmup: 1m           # jobs in the fake squeue are hours old, so this passes
+  min_samples: 3
+  max_sample_gap: 20s
+
+# Escalate quickly so the ladder is observable. Production defaults are
+# alert at 0 and drain at 60m.
+stages:
+  - after: 0s
+    verdict: alert
+  - after: 30s
+    verdict: drain
+
+exemptions:
+  # carol's eval sweeps are known-bursty; exempting her proves the path works.
+  users: [carol]
+
+slack:
+  webhook_env: SLACK_WEBHOOK_URL
+  min_verdict: alert
