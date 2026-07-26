@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# Fake squeue for the demo. Emits the same pipe-delimited shape the real
+# --Format string produces, so the parser under test is the production one.
+#
+# Jobs are dated to look long-running so they clear the warmup gate; the
+# scenario played against them is chosen by the GPU simulator in config.yaml.
+started() { date -u -v-"$1"H +%Y-%m-%dT%H:%M:%S 2>/dev/null || date -u -d "$1 hours ago" +%Y-%m-%dT%H:%M:%S; }
+
+cat <<EOF
+100241|llama-70b-sft|alice|research|gpu|normal|RUNNING|$(started 6)|gpu[001-002]|cpu=64,mem=512G,node=2,billing=64,gres/gpu=16
+100242|dataprep|bob|infra|gpu|normal|RUNNING|$(started 3)|gpu003|cpu=16,mem=128G,node=1,gres/gpu=4
+100243|eval-sweep|carol|research|gpu|high|RUNNING|$(started 9)|gpu004|cpu=8,mem=64G,node=1,gres/gpu=2
+100244|cpu-etl|dave|infra|cpu|normal|RUNNING|$(started 2)|cpu001|cpu=32,mem=64G,node=1
+EOF

@@ -1,4 +1,6 @@
-bin/
+# Build output only — anchored, so demo/bin/ (which ships the fake squeue the
+# demo depends on) is not swept up by a bare "bin/" pattern.
+/bin/
 *.test
 coverage.out
 .DS_Store
