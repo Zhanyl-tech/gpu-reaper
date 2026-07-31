@@ -206,6 +206,20 @@ Adding a telemetry backend means implementing `gpu.Source`; adding a job source
 means `slurm.Source`. Both are small interfaces, and the simulator is the
 reference implementation.
 
+## The set
+
+Part of a set of tools covering the lifecycle of a GPU allocation, each built on
+the same rule — never act on absent evidence:
+
+- **gpu-reaper** — this repo. Waste *during* a job.
+- **[epilog-gpu-validator](https://github.com/Zhanyl-tech/epilog-gpu-validator)** —
+  the companion the limitations above point at. Hardware faults *between* jobs,
+  where an active load test actually has the time budget to run.
+- **[ib-slurm-exporter](https://github.com/Zhanyl-tech/ib-slurm-exporter)** —
+  fabric problems attributed to the job causing them.
+- **[slurm-scheduler-lab](https://github.com/Zhanyl-tech/slurm-scheduler-lab)** —
+  the scheduling policy that decides what runs in the first place.
+
 ## License
 
 MIT
