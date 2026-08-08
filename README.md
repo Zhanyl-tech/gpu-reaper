@@ -28,6 +28,10 @@ queue, consumed by a process doing nothing.
 
 ## What it does
 
+![Scheduler and telemetry feed a policy engine that emits a finding, then a four step escalation ladder gated by mode](docs/escalation.svg)
+
+<sub>Everything left of the gate is reversible and on by default. Everything right of it requires `mode: enforce`.</sub>
+
 ```
 ┌──────────────┐        ┌──────────────┐
 │   squeue     │        │  nvidia-smi  │

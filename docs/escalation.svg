@@ -1,0 +1,96 @@
+<svg width="1200" height="750" viewBox="0 0 1200 750" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="ttl dsc">
+<title id="ttl">gpu-reaper: classification, then a gated escalation ladder</title>
+<desc id="dsc">Scheduler and telemetry feed a policy engine that emits a finding. Escalation runs from log to slack to drain to scancel, with a mode gate that stops observe mode before any destructive action.</desc>
+
+<rect width="1200" height="750" fill="#1a1520"/>
+
+<rect width="1200" height="86" fill="#241c26"/>
+<rect width="6" height="86" fill="#f5b544"/>
+<text x="44" y="38" font-family="ui-sans-serif,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="25" font-weight="700" fill="#e9eff5">Finding a wasted allocation is easy. Acting on it is the hard part.</text>
+<text x="44" y="66" font-family="ui-sans-serif,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="14.5" fill="#828c98">Slurm sees allocations, not GPUs. A deadlocked rank holds 16 H100s and the queue looks healthy.</text>
+
+<rect x="50" y="130" width="250" height="86" rx="11" fill="#251d28" stroke="#3a3040" stroke-width="1.5"/>
+<text x="70" y="157" font-family="ui-sans-serif,Arial,sans-serif" font-size="11" letter-spacing="1.2" font-weight="700" fill="#58a6ff">SCHEDULER</text>
+<text x="70" y="180" font-family="ui-monospace,Menlo,monospace" font-size="13.5" fill="#e9eff5">squeue / slurmrestd</text>
+<text x="70" y="201" font-family="ui-sans-serif,Arial,sans-serif" font-size="12" fill="#828c98">running jobs, nodes, TRES</text>
+
+<rect x="50" y="240" width="250" height="86" rx="11" fill="#251d28" stroke="#3a3040" stroke-width="1.5"/>
+<text x="70" y="267" font-family="ui-sans-serif,Arial,sans-serif" font-size="11" letter-spacing="1.2" font-weight="700" fill="#58a6ff">TELEMETRY</text>
+<text x="70" y="290" font-family="ui-monospace,Menlo,monospace" font-size="13.5" fill="#e9eff5">nvidia-smi / DCGM</text>
+<text x="70" y="311" font-family="ui-sans-serif,Arial,sans-serif" font-size="12" fill="#828c98">util, mem, power, PIDs</text>
+
+<path d="M300,173 H340 V228" fill="none" stroke="#3a3040" stroke-width="2"/>
+<path d="M300,283 H340 V228" fill="none" stroke="#3a3040" stroke-width="2"/>
+<line x1="340" y1="228" x2="386" y2="228" stroke="#2e2433" stroke-width="2" stroke-dasharray="5 4"/>
+<polygon points="384,222 396,228 384,234" fill="#58a6ff"/>
+<circle r="4.5" cx="340" cy="228" fill="#58a6ff" opacity="0">
+<animate attributeName="cx" values="340;386" dur="1.3s" repeatCount="indefinite"/>
+<animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.15;0.85;1" dur="1.3s" repeatCount="indefinite"/>
+</circle>
+
+<rect x="400" y="130" width="280" height="196" rx="11" fill="#251d28" stroke="#58a6ff" stroke-width="2"/>
+<text x="422" y="158" font-family="ui-sans-serif,Arial,sans-serif" font-size="11" letter-spacing="1.2" font-weight="700" fill="#58a6ff">POLICY ENGINE</text>
+<text x="422" y="188" font-family="ui-sans-serif,Arial,sans-serif" font-size="13.5" fill="#e9eff5">window &#183; warmup</text>
+<text x="422" y="213" font-family="ui-sans-serif,Arial,sans-serif" font-size="13.5" fill="#e9eff5">gap detection</text>
+<text x="422" y="238" font-family="ui-sans-serif,Arial,sans-serif" font-size="13.5" fill="#e9eff5">signature classification</text>
+<line x1="422" y1="256" x2="658" y2="256" stroke="#3a3040" stroke-width="1"/>
+<text x="422" y="280" font-family="ui-sans-serif,Arial,sans-serif" font-size="12" fill="#828c98">warmup exists so a job that has not</text>
+<text x="422" y="299" font-family="ui-sans-serif,Arial,sans-serif" font-size="12" fill="#828c98">started computing is never called idle</text>
+
+<line x1="680" y1="228" x2="726" y2="228" stroke="#2e2433" stroke-width="2" stroke-dasharray="5 4"/>
+<polygon points="724,222 736,228 724,234" fill="#f5b544"/>
+
+<rect x="740" y="150" width="300" height="156" rx="11" fill="#251d28" stroke="#f5b544" stroke-width="2"/>
+<text x="762" y="178" font-family="ui-sans-serif,Arial,sans-serif" font-size="11" letter-spacing="1.2" font-weight="700" fill="#f5b544">FINDING</text>
+<text x="762" y="207" font-family="ui-monospace,Menlo,monospace" font-size="13.5" fill="#e9eff5">verdict:   hung</text>
+<text x="762" y="230" font-family="ui-monospace,Menlo,monospace" font-size="13.5" fill="#e9eff5">signature: nccl-stall</text>
+<text x="762" y="253" font-family="ui-monospace,Menlo,monospace" font-size="13.5" fill="#f5b544">wasted:    704 GPU-hours</text>
+<text x="762" y="284" font-family="ui-sans-serif,Arial,sans-serif" font-size="12" fill="#828c98">16 H100s x 44 h, queue still waiting</text>
+
+<text x="50" y="382" font-family="ui-sans-serif,Arial,sans-serif" font-size="11.5" letter-spacing="1.4" font-weight="700" fill="#828c98">ESCALATION LADDER &#8212; ONLY AS FAR AS YOU TELL IT TO GO</text>
+
+<rect x="50" y="398" width="210" height="84" rx="10" fill="#251d28" stroke="#3fb950" stroke-width="1.5"/>
+<text x="155" y="428" font-family="ui-monospace,Menlo,monospace" font-size="15" fill="#e9eff5" text-anchor="middle">log</text>
+<text x="155" y="452" font-family="ui-sans-serif,Arial,sans-serif" font-size="12" fill="#3fb950" text-anchor="middle">always safe</text>
+<text x="155" y="470" font-family="ui-sans-serif,Arial,sans-serif" font-size="11.5" fill="#828c98" text-anchor="middle">reversible</text>
+
+<rect x="300" y="398" width="210" height="84" rx="10" fill="#251d28" stroke="#3fb950" stroke-width="1.5"/>
+<text x="405" y="428" font-family="ui-monospace,Menlo,monospace" font-size="15" fill="#e9eff5" text-anchor="middle">slack</text>
+<text x="405" y="452" font-family="ui-sans-serif,Arial,sans-serif" font-size="12" fill="#3fb950" text-anchor="middle">notify a human</text>
+<text x="405" y="470" font-family="ui-sans-serif,Arial,sans-serif" font-size="11.5" fill="#828c98" text-anchor="middle">reversible</text>
+
+<line x1="570" y1="376" x2="570" y2="506" stroke="#f5b544" stroke-width="2.5" stroke-dasharray="7 5">
+<animate attributeName="opacity" values="1;0.3;1" dur="1.8s" repeatCount="indefinite"/>
+</line>
+<rect x="500" y="512" width="140" height="26" rx="13" fill="#241c26" stroke="#f5b544" stroke-width="1.5"/>
+<text x="570" y="530" font-family="ui-sans-serif,Arial,sans-serif" font-size="12" font-weight="700" fill="#f5b544" text-anchor="middle">mode: enforce</text>
+<text x="570" y="368" font-family="ui-sans-serif,Arial,sans-serif" font-size="12" font-weight="700" fill="#f5b544" text-anchor="middle">observe stops here</text>
+
+<rect x="630" y="398" width="210" height="84" rx="10" fill="#251d28" stroke="#f85149" stroke-width="1.5"/>
+<text x="735" y="428" font-family="ui-monospace,Menlo,monospace" font-size="15" fill="#e9eff5" text-anchor="middle">drain</text>
+<text x="735" y="452" font-family="ui-sans-serif,Arial,sans-serif" font-size="12" fill="#f85149" text-anchor="middle">stops new work</text>
+<text x="735" y="470" font-family="ui-sans-serif,Arial,sans-serif" font-size="11.5" fill="#828c98" text-anchor="middle">reversible, wide blast radius</text>
+
+<rect x="870" y="398" width="210" height="84" rx="10" fill="#251d28" stroke="#f85149" stroke-width="2"/>
+<text x="975" y="428" font-family="ui-monospace,Menlo,monospace" font-size="15" fill="#e9eff5" text-anchor="middle">scancel</text>
+<text x="975" y="452" font-family="ui-sans-serif,Arial,sans-serif" font-size="12" fill="#f85149" text-anchor="middle">destroys the run</text>
+<text x="975" y="470" font-family="ui-sans-serif,Arial,sans-serif" font-size="11.5" fill="#828c98" text-anchor="middle">not reversible</text>
+
+<line x1="260" y1="440" x2="296" y2="440" stroke="#2e2433" stroke-width="2" stroke-dasharray="4 4"/>
+<line x1="510" y1="440" x2="546" y2="440" stroke="#2e2433" stroke-width="2" stroke-dasharray="4 4"/>
+<line x1="594" y1="440" x2="626" y2="440" stroke="#2e2433" stroke-width="2" stroke-dasharray="4 4"/>
+<line x1="840" y1="440" x2="866" y2="440" stroke="#2e2433" stroke-width="2" stroke-dasharray="4 4"/>
+
+<circle r="5" cy="440" fill="#f5b544" opacity="0">
+<animate attributeName="cx" values="60;1070" dur="5s" repeatCount="indefinite"/>
+<animate attributeName="opacity" values="0;1;1;1;0" keyTimes="0;0.05;0.5;0.92;1" dur="5s" repeatCount="indefinite"/>
+</circle>
+
+<rect x="50" y="574" width="1030" height="140" rx="11" fill="#251d28" stroke="#3a3040" stroke-width="1.5"/>
+<rect x="50" y="574" width="5" height="140" fill="#3fb950"/>
+<text x="78" y="604" font-family="ui-sans-serif,Arial,sans-serif" font-size="11.5" letter-spacing="1.4" font-weight="700" fill="#3fb950">THE ASYMMETRY EVERY DEFAULT FOLLOWS FROM</text>
+<text x="78" y="633" font-family="ui-sans-serif,Arial,sans-serif" font-size="15.5" fill="#e9eff5">Killing a healthy job is much worse than letting a wasted one run another hour.</text>
+<text x="78" y="659" font-family="ui-sans-serif,Arial,sans-serif" font-size="15.5" fill="#e9eff5">A 40-hour run that dies at hour 39 loses the run and the researcher's trust in the tool.</text>
+<text x="78" y="685" font-family="ui-sans-serif,Arial,sans-serif" font-size="15.5" fill="#e9eff5">A wasted allocation surviving one more cycle costs one more cycle.</text>
+<text x="78" y="706" font-family="ui-sans-serif,Arial,sans-serif" font-size="13" font-style="italic" fill="#828c98">So the default is observe, and every step past notify is something you switch on deliberately.</text>
+</svg>
