@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="470" viewBox="0 0 960 470" role="img"
+     aria-label="Terminal recording of `make demo-once`: gpu-reaper starts in observe mode against a simulated hung-GPU cluster, reports two alert findings for jobs 100241 and 100242, and cancels nothing.">
+  <defs>
+    <style>
+      .m  { font-family: 'JetBrains Mono','SF Mono',Menlo,Consolas,monospace; font-size: 12px; }
+      .dim    { fill: #7d8894; }
+      .txt    { fill: #cdd6df; }
+      .prompt { fill: #3fb950; }
+      .cmd    { fill: #e9eff5; font-weight: 600; }
+      .warn   { fill: #f5b544; }
+      .info   { fill: #58a6ff; }
+      .key    { fill: #8b96a3; }
+      .val    { fill: #e9eff5; }
+      .safe   { fill: #3fb950; font-weight: 600; }
+      .note   { font-size: 11px; fill: #7d8894; }
+    </style>
+  </defs>
+
+  <rect width="960" height="470" rx="10" fill="#141a23"/>
+  <rect x="0.5" y="0.5" width="959" height="469" rx="10" fill="none" stroke="#243040"/>
+
+  <!-- title bar -->
+  <circle cx="24" cy="22" r="5" fill="#ff5f56"/>
+  <circle cx="42" cy="22" r="5" fill="#ffbd2e"/>
+  <circle cx="60" cy="22" r="5" fill="#27c93f"/>
+  <text class="m dim" x="86" y="26">gpu-reaper — make demo-once</text>
+  <line x1="0" y1="42" x2="960" y2="42" stroke="#243040"/>
+
+  <text class="m prompt" x="20" y="70">$</text>
+  <text class="m cmd" x="38" y="70">make demo-once</text>
+  <text class="m dim" x="180" y="70">      # no GPUs, no Slurm, no cluster</text>
+
+  <text class="m warn" x="20" y="96">WARN</text>
+  <text class="m txt" x="66" y="96">slack configured but env var is empty</text>
+  <text class="m key" x="360" y="96">env=</text><text class="m val" x="392" y="96">SLACK_WEBHOOK_URL</text>
+
+  <text class="m info" x="20" y="118">INFO</text>
+  <text class="m txt" x="66" y="118">starting</text>
+  <text class="m key" x="140" y="118">version=</text><text class="m val" x="204" y="118">v0.1.0</text>
+  <text class="m key" x="264" y="118">mode=</text><text class="m safe" x="304" y="118">observe</text>
+  <text class="m key" x="372" y="118">gpu_source=</text><text class="m val" x="460" y="118">simulator/hung</text>
+  <text class="m key" x="580" y="118">util_threshold_pct=</text><text class="m val" x="732" y="118">15</text>
+
+  <text class="m info" x="20" y="140">INFO</text>
+  <text class="m safe" x="66" y="140">observe mode: no jobs will be cancelled and no nodes drained</text>
+
+  <text class="m info" x="20" y="162">INFO</text>
+  <text class="m txt" x="66" y="162">metrics listening</text>
+  <text class="m key" x="212" y="162">addr=</text><text class="m val" x="252" y="162">:9835</text>
+
+  <line x1="20" y1="182" x2="940" y2="182" stroke="#1e2836"/>
+
+  <!-- finding 1 -->
+  <text class="m info" x="20" y="208">INFO</text>
+  <text class="m txt" x="66" y="208">finding</text>
+  <text class="m key" x="132" y="208">verdict=</text><text class="m warn" x="196" y="208">alert</text>
+  <text class="m key" x="252" y="208">signature=</text><text class="m val" x="332" y="208">hung</text>
+  <text class="m key" x="384" y="208">job_id=</text><text class="m val" x="440" y="208">100241</text>
+  <text class="m key" x="504" y="208">user=</text><text class="m val" x="544" y="208">alice</text>
+  <text class="m key" x="604" y="208">gpus=</text><text class="m val" x="644" y="208">16</text>
+  <text class="m dim" x="66" y="228">reason="hung: mean util 0.0% (peak 0.0%) below 15.0%; mem held 74%, mean power 90W"</text>
+
+  <!-- finding 2 -->
+  <text class="m info" x="20" y="256">INFO</text>
+  <text class="m txt" x="66" y="256">finding</text>
+  <text class="m key" x="132" y="256">verdict=</text><text class="m warn" x="196" y="256">alert</text>
+  <text class="m key" x="252" y="256">signature=</text><text class="m val" x="332" y="256">hung</text>
+  <text class="m key" x="384" y="256">job_id=</text><text class="m val" x="440" y="256">100242</text>
+  <text class="m key" x="504" y="256">user=</text><text class="m val" x="544" y="256">bob</text>
+  <text class="m key" x="604" y="256">gpus=</text><text class="m val" x="644" y="256">4</text>
+  <text class="m dim" x="66" y="276">reason="hung: mean util 0.0% (peak 0.0%) below 15.0%; mem held 74%, mean power 89W"</text>
+
+  <line x1="20" y1="298" x2="940" y2="298" stroke="#1e2836"/>
+
+  <!-- the point -->
+  <text class="m note" x="20" y="326">Two jobs holding 20 GPUs at 0% utilisation. Both reported. Neither cancelled.</text>
+  <text class="m note" x="20" y="346">verdict=alert, not cancel — a kill requires a history of prior warnings across cycles,</text>
+  <text class="m note" x="20" y="366">and observe mode is the default so the tool cannot act on the day it is installed.</text>
+
+  <text class="m note" x="20" y="398" fill="#3fb950">The GPU telemetry here is a simulator. No GPUs, no Slurm controller, no cluster —</text>
+  <text class="m note" x="20" y="418" fill="#3fb950">every classification branch is reachable without a broken card to hand.</text>
+
+  <text class="m prompt" x="20" y="450">$</text>
+  <rect x="38" y="440" width="8" height="13" fill="#3fb950" opacity="0.85"/>
+</svg>
