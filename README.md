@@ -1,5 +1,10 @@
 # gpu-reaper
 
+<p align="center">
+  <img src="./docs/demo.svg" width="100%"
+       alt="make demo-once: gpu-reaper starts in observe mode against a simulated hung-GPU cluster, reports two alert findings for jobs holding 20 GPUs at 0% utilisation, and cancels nothing.">
+</p>
+
 Find wasted GPU allocations on a Slurm cluster. Alert on them, drain the nodes,
 or cancel the job — in that order, and only as far as you tell it to go.
 
