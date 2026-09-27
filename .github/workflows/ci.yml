@@ -5,24 +5,69 @@ on:
     branches: [main]
   pull_request:
 
+# Nothing in CI needs to write to the repository.
+permissions:
+  contents: read
+
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-go@v5
+      # Actions are pinned to commit SHAs; the comment names the tag.
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+      - uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6.5.0
         with:
-          go-version: '1.26'
+          # Latest 1.26 patch release, so builds and govulncheck see a patched
+          # standard library rather than whatever go.mod's minimum names.
+          go-version: '1.26.x'
+          check-latest: true
+      - name: gofmt
+        run: test -z "$(gofmt -l .)" || { gofmt -l .; exit 1; }
       - run: go vet ./...
-      - run: go test -race -cover ./...
+      - name: staticcheck
+        run: go run honnef.co/go/tools/cmd/staticcheck@v0.8.1 ./...
+      - name: govulncheck
+        run: go run golang.org/x/vuln/cmd/govulncheck@v1.8.0 ./...
+      - name: test (race) with coverage floor
+        run: |
+          go test -race -coverpkg=./... -coverprofile=coverage.out ./...
+          total=$(go tool cover -func=coverage.out | awk '/^total:/ {sub("%","",$3); print $3}')
+          echo "module coverage: ${total}%"
+          # This exact command measured 89.7% when the floor was last reviewed
+          # (hack/demosvg, which has no tests, included at 0%). The floor sits
+          # below that, so a change that deletes tests for the destructive
+          # path fails CI.
+          awk -v t="$total" 'BEGIN { exit (t < 80) }' || { echo "coverage ${total}% is below the 80% floor"; exit 1; }
       - run: go build ./...
+      - name: shellcheck
+        run: shellcheck demo/check.sh demo/bin/squeue
 
   demo:
     # The demo is a documented promise; if it breaks, the README is wrong.
+    # demo/check.sh asserts each scenario's outcome (flaky: only that it
+    # never passes alert). The fake squeue prints
+    # local time like real squeue, so running under several zones checks the
+    # start-time parsing that once put jobs hours off.
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        tz: [UTC, America/Los_Angeles, Asia/Tokyo]
+    env:
+      TZ: ${{ matrix.tz }}
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+      - uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6.5.0
+        with:
+          go-version: '1.26.x'
+          check-latest: true
+      - run: make run-scenarios
+
+  image:
+    # Builds the container image; nothing is pushed.
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-go@v5
-        with:
-          go-version: '1.26'
-      - run: make demo-once
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+      - run: docker build --build-arg VERSION=ci -t gpu-reaper:ci .
+      - name: image runs
+        run: docker run --rm gpu-reaper:ci --version

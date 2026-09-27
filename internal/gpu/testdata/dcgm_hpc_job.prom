@@ -1,0 +1,20 @@
+# HELP DCGM_FI_DEV_GPU_UTIL GPU utilization (in %).
+# TYPE DCGM_FI_DEV_GPU_UTIL gauge
+DCGM_FI_DEV_GPU_UTIL{gpu="0",UUID="GPU-aaaaaaaa-0000-0000-0000-000000000000",pci_bus_id="00000000:18:00.0",device="nvidia0",modelName="NVIDIA H100 80GB HBM3",hostname="gpu001",hpc_job="4242"} 0
+DCGM_FI_DEV_GPU_UTIL{gpu="0",UUID="GPU-aaaaaaaa-0000-0000-0000-000000000000",pci_bus_id="00000000:18:00.0",device="nvidia0",modelName="NVIDIA H100 80GB HBM3",hostname="gpu001",hpc_job="4243"} 0
+DCGM_FI_DEV_GPU_UTIL{gpu="1",UUID="GPU-bbbbbbbb-0000-0000-0000-000000000000",pci_bus_id="00000000:2A:00.0",device="nvidia1",modelName="NVIDIA H100 80GB HBM3",hostname="gpu001",hpc_job="4242"} 3
+# HELP DCGM_FI_DEV_FB_FREE Framebuffer memory free (in MiB).
+# TYPE DCGM_FI_DEV_FB_FREE gauge
+DCGM_FI_DEV_FB_FREE{gpu="0",UUID="GPU-aaaaaaaa-0000-0000-0000-000000000000",pci_bus_id="00000000:18:00.0",device="nvidia0",modelName="NVIDIA H100 80GB HBM3",hostname="gpu001",hpc_job="4242"} 20000
+DCGM_FI_DEV_FB_FREE{gpu="0",UUID="GPU-aaaaaaaa-0000-0000-0000-000000000000",pci_bus_id="00000000:18:00.0",device="nvidia0",modelName="NVIDIA H100 80GB HBM3",hostname="gpu001",hpc_job="4243"} 20000
+DCGM_FI_DEV_FB_FREE{gpu="1",UUID="GPU-bbbbbbbb-0000-0000-0000-000000000000",pci_bus_id="00000000:2A:00.0",device="nvidia1",modelName="NVIDIA H100 80GB HBM3",hostname="gpu001",hpc_job="4242"} 20000
+# HELP DCGM_FI_DEV_FB_USED Framebuffer memory used (in MiB).
+# TYPE DCGM_FI_DEV_FB_USED gauge
+DCGM_FI_DEV_FB_USED{gpu="0",UUID="GPU-aaaaaaaa-0000-0000-0000-000000000000",pci_bus_id="00000000:18:00.0",device="nvidia0",modelName="NVIDIA H100 80GB HBM3",hostname="gpu001",hpc_job="4242"} 60000
+DCGM_FI_DEV_FB_USED{gpu="0",UUID="GPU-aaaaaaaa-0000-0000-0000-000000000000",pci_bus_id="00000000:18:00.0",device="nvidia0",modelName="NVIDIA H100 80GB HBM3",hostname="gpu001",hpc_job="4243"} 60000
+DCGM_FI_DEV_FB_USED{gpu="1",UUID="GPU-bbbbbbbb-0000-0000-0000-000000000000",pci_bus_id="00000000:2A:00.0",device="nvidia1",modelName="NVIDIA H100 80GB HBM3",hostname="gpu001",hpc_job="4242"} 60000
+# HELP DCGM_FI_DEV_POWER_USAGE Power draw (in W).
+# TYPE DCGM_FI_DEV_POWER_USAGE gauge
+DCGM_FI_DEV_POWER_USAGE{gpu="0",UUID="GPU-aaaaaaaa-0000-0000-0000-000000000000",pci_bus_id="00000000:18:00.0",device="nvidia0",modelName="NVIDIA H100 80GB HBM3",hostname="gpu001",hpc_job="4242"} 90
+DCGM_FI_DEV_POWER_USAGE{gpu="0",UUID="GPU-aaaaaaaa-0000-0000-0000-000000000000",pci_bus_id="00000000:18:00.0",device="nvidia0",modelName="NVIDIA H100 80GB HBM3",hostname="gpu001",hpc_job="4243"} 90
+DCGM_FI_DEV_POWER_USAGE{gpu="1",UUID="GPU-bbbbbbbb-0000-0000-0000-000000000000",pci_bus_id="00000000:2A:00.0",device="nvidia1",modelName="NVIDIA H100 80GB HBM3",hostname="gpu001",hpc_job="4242"} 95

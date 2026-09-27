@@ -21,6 +21,9 @@ type Job struct {
 	QOS       string
 	State     string
 
+	// StartTime is when this incarnation of the job started. Zero means unknown,
+	// which the policy engine refuses to judge. A requeued job keeps its JobID
+	// but gets a new StartTime, and the engine treats it as a new job.
 	StartTime time.Time
 	Nodes     []string
 
@@ -54,12 +57,15 @@ type Source interface {
 // is separate from Source: it makes the read-only path impossible to confuse
 // with the write path, and makes a no-op implementation trivial for dry runs.
 type Controller interface {
-	// Cancel terminates a job, recording reason in the accounting record so a
-	// user asking "what happened to job 12345" gets an answer.
+	// Cancel terminates a job. Implementations must record reason where the
+	// affected user can find it (CLIController sets the job's AdminComment
+	// first and refuses to cancel if it cannot), so "what happened to job
+	// 12345" has an answer outside our logs.
 	Cancel(ctx context.Context, jobID, reason string) error
 
 	// Drain marks a node unavailable for new work without disturbing what is
-	// already running on it.
+	// already running on it. Slurm leaves a drained node DRAINED after its jobs
+	// finish; nothing in this tool resumes it.
 	Drain(ctx context.Context, node, reason string) error
 
 	Name() string

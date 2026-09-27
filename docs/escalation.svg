@@ -1,13 +1,13 @@
 <svg width="1200" height="750" viewBox="0 0 1200 750" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="ttl dsc">
 <title id="ttl">gpu-reaper: classification, then a gated escalation ladder</title>
-<desc id="dsc">Scheduler and telemetry feed a policy engine that emits a finding. Escalation runs from log to slack to drain to scancel, with a mode gate that stops observe mode before any destructive action.</desc>
+<desc id="dsc">Scheduler and telemetry feed a policy engine that emits a finding. Escalation runs from log to slack to drain to scancel, with a mode gate that stops observe mode before any destructive action. A drained node stays drained until an administrator resumes it.</desc>
 
 <rect width="1200" height="750" fill="#1a1520"/>
 
 <rect width="1200" height="86" fill="#241c26"/>
 <rect width="6" height="86" fill="#f5b544"/>
 <text x="44" y="38" font-family="ui-sans-serif,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="25" font-weight="700" fill="#e9eff5">Finding a wasted allocation is easy. Acting on it is the hard part.</text>
-<text x="44" y="66" font-family="ui-sans-serif,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="14.5" fill="#828c98">Slurm sees allocations, not GPUs. A deadlocked rank holds 16 H100s and the queue looks healthy.</text>
+<text x="44" y="66" font-family="ui-sans-serif,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="14.5" fill="#828c98">Slurm can record GPU utilization but does not act on it. A deadlocked rank holds 16 H100s; the queue looks healthy.</text>
 
 <rect x="50" y="130" width="250" height="86" rx="11" fill="#251d28" stroke="#3a3040" stroke-width="1.5"/>
 <text x="70" y="157" font-family="ui-sans-serif,Arial,sans-serif" font-size="11" letter-spacing="1.2" font-weight="700" fill="#58a6ff">SCHEDULER</text>
@@ -16,7 +16,7 @@
 
 <rect x="50" y="240" width="250" height="86" rx="11" fill="#251d28" stroke="#3a3040" stroke-width="1.5"/>
 <text x="70" y="267" font-family="ui-sans-serif,Arial,sans-serif" font-size="11" letter-spacing="1.2" font-weight="700" fill="#58a6ff">TELEMETRY</text>
-<text x="70" y="290" font-family="ui-monospace,Menlo,monospace" font-size="13.5" fill="#e9eff5">nvidia-smi / DCGM</text>
+<text x="70" y="290" font-family="ui-monospace,Menlo,monospace" font-size="13.5" fill="#e9eff5">nvidia-smi / dcgm-exporter</text>
 <text x="70" y="311" font-family="ui-sans-serif,Arial,sans-serif" font-size="12" fill="#828c98">util, mem, power, PIDs</text>
 
 <path d="M300,173 H340 V228" fill="none" stroke="#3a3040" stroke-width="2"/>
@@ -30,8 +30,8 @@
 
 <rect x="400" y="130" width="280" height="196" rx="11" fill="#251d28" stroke="#58a6ff" stroke-width="2"/>
 <text x="422" y="158" font-family="ui-sans-serif,Arial,sans-serif" font-size="11" letter-spacing="1.2" font-weight="700" fill="#58a6ff">POLICY ENGINE</text>
-<text x="422" y="188" font-family="ui-sans-serif,Arial,sans-serif" font-size="13.5" fill="#e9eff5">window &#183; warmup</text>
-<text x="422" y="213" font-family="ui-sans-serif,Arial,sans-serif" font-size="13.5" fill="#e9eff5">gap detection</text>
+<text x="422" y="188" font-family="ui-sans-serif,Arial,sans-serif" font-size="13.5" fill="#e9eff5">window coverage &#183; warmup</text>
+<text x="422" y="213" font-family="ui-sans-serif,Arial,sans-serif" font-size="13.5" fill="#e9eff5">gap and staleness detection</text>
 <text x="422" y="238" font-family="ui-sans-serif,Arial,sans-serif" font-size="13.5" fill="#e9eff5">signature classification</text>
 <line x1="422" y1="256" x2="658" y2="256" stroke="#3a3040" stroke-width="1"/>
 <text x="422" y="280" font-family="ui-sans-serif,Arial,sans-serif" font-size="12" fill="#828c98">warmup exists so a job that has not</text>
@@ -42,8 +42,8 @@
 
 <rect x="740" y="150" width="300" height="156" rx="11" fill="#251d28" stroke="#f5b544" stroke-width="2"/>
 <text x="762" y="178" font-family="ui-sans-serif,Arial,sans-serif" font-size="11" letter-spacing="1.2" font-weight="700" fill="#f5b544">FINDING</text>
-<text x="762" y="207" font-family="ui-monospace,Menlo,monospace" font-size="13.5" fill="#e9eff5">verdict:   hung</text>
-<text x="762" y="230" font-family="ui-monospace,Menlo,monospace" font-size="13.5" fill="#e9eff5">signature: nccl-stall</text>
+<text x="762" y="207" font-family="ui-monospace,Menlo,monospace" font-size="13.5" fill="#e9eff5">verdict:   drain</text>
+<text x="762" y="230" font-family="ui-monospace,Menlo,monospace" font-size="13.5" fill="#e9eff5">signature: hung</text>
 <text x="762" y="253" font-family="ui-monospace,Menlo,monospace" font-size="13.5" fill="#f5b544">wasted:    704 GPU-hours</text>
 <text x="762" y="284" font-family="ui-sans-serif,Arial,sans-serif" font-size="12" fill="#828c98">16 H100s x 44 h, queue still waiting</text>
 
@@ -69,7 +69,7 @@
 <rect x="630" y="398" width="210" height="84" rx="10" fill="#251d28" stroke="#f85149" stroke-width="1.5"/>
 <text x="735" y="428" font-family="ui-monospace,Menlo,monospace" font-size="15" fill="#e9eff5" text-anchor="middle">drain</text>
 <text x="735" y="452" font-family="ui-sans-serif,Arial,sans-serif" font-size="12" fill="#f85149" text-anchor="middle">stops new work</text>
-<text x="735" y="470" font-family="ui-sans-serif,Arial,sans-serif" font-size="11.5" fill="#828c98" text-anchor="middle">reversible, wide blast radius</text>
+<text x="735" y="470" font-family="ui-sans-serif,Arial,sans-serif" font-size="11.5" fill="#828c98" text-anchor="middle">until an admin RESUMEs it</text>
 
 <rect x="870" y="398" width="210" height="84" rx="10" fill="#251d28" stroke="#f85149" stroke-width="2"/>
 <text x="975" y="428" font-family="ui-monospace,Menlo,monospace" font-size="15" fill="#e9eff5" text-anchor="middle">scancel</text>

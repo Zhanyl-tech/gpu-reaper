@@ -4,14 +4,21 @@ COPY go.mod go.sum ./
 RUN go mod download
 COPY . .
 ARG VERSION=dev
-RUN CGO_ENABLED=0 go build -ldflags "-s -w -X main.version=${VERSION}" -o /gpu-reaper ./cmd/gpu-reaper
+RUN CGO_ENABLED=0 go build -trimpath -ldflags "-s -w -X main.version=${VERSION}" -o /gpu-reaper ./cmd/gpu-reaper
 
-# The runtime image intentionally has no nvidia-smi. On a GPU node the binary is
-# run directly or in a container with the NVIDIA runtime mounted in; baking a
-# driver-version-specific toolkit into the image would pin it to one node image.
-FROM alpine:3.21
-RUN apk add --no-cache ca-certificates && adduser -D -u 10001 reaper
+# Runtime: distroless base (Debian, glibc, no shell). glibc rather than Alpine's
+# musl because the NVIDIA container toolkit injects the host's glibc-linked
+# nvidia-smi and libnvidia-ml; the request for Alpine support
+# (NVIDIA/nvidia-container-toolkit issue #270) was closed as not planned.
+#
+# What works inside this image, as shipped:
+#   - slurm.source: rest     (HTTP only)
+#   - gpu.source: dcgm       (HTTP only)
+#   - gpu.source: nvidia-smi only if the NVIDIA runtime mounts it in
+# What does not: slurm.source: squeue, and enforce mode, because the image has
+# no squeue, scancel, scontrol or munge. Baking Slurm client binaries in would
+# pin the image to one Slurm version and authentication setup.
+FROM gcr.io/distroless/base-debian12:nonroot
 COPY --from=build /gpu-reaper /usr/local/bin/gpu-reaper
-USER reaper
 EXPOSE 9835
 ENTRYPOINT ["/usr/local/bin/gpu-reaper"]
