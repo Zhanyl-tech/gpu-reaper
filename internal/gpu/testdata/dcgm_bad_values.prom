@@ -1,0 +1,12 @@
+# TYPE DCGM_FI_DEV_GPU_UTIL gauge
+DCGM_FI_DEV_GPU_UTIL{gpu="0",UUID="GPU-aaaaaaaa-0000-0000-0000-000000000000",pci_bus_id="00000000:18:00.0",device="nvidia0",modelName="NVIDIA H100 80GB HBM3",hostname="gpu001"} 150
+DCGM_FI_DEV_GPU_UTIL{gpu="1",UUID="GPU-bbbbbbbb-0000-0000-0000-000000000000",pci_bus_id="00000000:2A:00.0",device="nvidia1",modelName="NVIDIA H100 80GB HBM3",hostname="gpu001"} NaN
+# TYPE DCGM_FI_DEV_FB_FREE gauge
+DCGM_FI_DEV_FB_FREE{gpu="0",UUID="GPU-aaaaaaaa-0000-0000-0000-000000000000",pci_bus_id="00000000:18:00.0",device="nvidia0",modelName="NVIDIA H100 80GB HBM3",hostname="gpu001"} 80000
+DCGM_FI_DEV_FB_FREE{gpu="1",UUID="GPU-bbbbbbbb-0000-0000-0000-000000000000",pci_bus_id="00000000:2A:00.0",device="nvidia1",modelName="NVIDIA H100 80GB HBM3",hostname="gpu001"} 80000
+# TYPE DCGM_FI_DEV_FB_USED gauge
+DCGM_FI_DEV_FB_USED{gpu="0",UUID="GPU-aaaaaaaa-0000-0000-0000-000000000000",pci_bus_id="00000000:18:00.0",device="nvidia0",modelName="NVIDIA H100 80GB HBM3",hostname="gpu001"} 0
+DCGM_FI_DEV_FB_USED{gpu="1",UUID="GPU-bbbbbbbb-0000-0000-0000-000000000000",pci_bus_id="00000000:2A:00.0",device="nvidia1",modelName="NVIDIA H100 80GB HBM3",hostname="gpu001"} -1
+# TYPE DCGM_FI_DEV_POWER_USAGE gauge
+DCGM_FI_DEV_POWER_USAGE{gpu="0",UUID="GPU-aaaaaaaa-0000-0000-0000-000000000000",pci_bus_id="00000000:18:00.0",device="nvidia0",modelName="NVIDIA H100 80GB HBM3",hostname="gpu001"} +Inf
+DCGM_FI_DEV_POWER_USAGE{gpu="1",UUID="GPU-bbbbbbbb-0000-0000-0000-000000000000",pci_bus_id="00000000:2A:00.0",device="nvidia1",modelName="NVIDIA H100 80GB HBM3",hostname="gpu001"} 70

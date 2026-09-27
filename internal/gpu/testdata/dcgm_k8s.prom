@@ -1,0 +1,6 @@
+# TYPE DCGM_FI_DEV_GPU_UTIL gauge
+DCGM_FI_DEV_GPU_UTIL{gpu="0",UUID="GPU-aaaaaaaa-0000-0000-0000-000000000000",pci_bus_id="00000000:18:00.0",device="nvidia0",modelName="NVIDIA H100 80GB HBM3",hostname="gpu001",container="slurmd",namespace="slurm",pod="gpu-2-1"} 12
+# TYPE DCGM_FI_DEV_FB_FREE gauge
+DCGM_FI_DEV_FB_FREE{gpu="0",UUID="GPU-aaaaaaaa-0000-0000-0000-000000000000",pci_bus_id="00000000:18:00.0",device="nvidia0",modelName="NVIDIA H100 80GB HBM3",hostname="gpu001",container="slurmd",namespace="slurm",pod="gpu-2-1"} 1000
+# TYPE DCGM_FI_DEV_FB_USED gauge
+DCGM_FI_DEV_FB_USED{gpu="0",UUID="GPU-aaaaaaaa-0000-0000-0000-000000000000",pci_bus_id="00000000:18:00.0",device="nvidia0",modelName="NVIDIA H100 80GB HBM3",hostname="gpu001",container="slurmd",namespace="slurm",pod="gpu-2-1"} 79000

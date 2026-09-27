@@ -1,22 +1,41 @@
 # Example production configuration. See README.md for every field.
 #
 # Start in observe mode. Watch gpu_reaper_findings for a week before you
-# consider enforcement.
+# consider enforcement. config_test.go loads this file and fails if it stops
+# validating or if any drain/cancel stage is shorter than the window.
 
-mode: observe          # never anything else in the demo
+mode: observe            # observe | enforce
 interval: 2m
 metrics_addr: ":9835"
-log_format: text
+log_format: json
 
 slurm:
-  source: squeue
+  source: squeue         # squeue | rest
+  # Must be absolute paths when mode: enforce (squeue_path only with source
+  # squeue), so nothing earlier in PATH can stand in for them. Adjust to where
+  # your Slurm installs them.
+  squeue_path: /usr/bin/squeue
+  scancel_path: /usr/bin/scancel
+  scontrol_path: /usr/bin/scontrol
+  # source: rest
+  # rest_url: http://slurmrestd:6820
+  # rest_version: v0.0.42
+  # username: slurm
+  # token_file: /run/secrets/slurm-jwt   # re-read on every request
 
 gpu:
-  source: nvidia-smi
-  simulator:
-    gpus: 8
-    scenario: hung     # try: healthy | idle | hung | starved | flaky
-    seed: 1
+  source: nvidia-smi     # nvidia-smi | dcgm | simulator
+  # Looked up on PATH by default. Must be an absolute path when mode: enforce,
+  # since its output decides what is idle. Adjust to where the driver installs it.
+  # nvidia_smi_path: /usr/bin/nvidia-smi
+  # This host's Slurm NodeName. Defaults to the OS hostname, which is wrong
+  # wherever the two differ (FQDN versus short name, or a Kubernetes pod).
+  # The --node-name flag overrides it.
+  # node_name: gpu001
+  # dcgm:
+  #   url: "http://{node}:9400/metrics"   # {node} = central mode, one scrape per node
+  #   timeout: 5s
+  #   max_age: 2m
 
 thresholds:
   util_pct: 15
@@ -24,21 +43,34 @@ thresholds:
   idle_power_watts: 60
   window: 20m
   warmup: 15m
-  min_samples: 8
-  max_sample_gap: 3m
+  min_samples: 8         # observations (cycles) per node, not GPU samples
+  max_sample_gap: 3m     # must sit between interval and window
 
-# Escalate quickly so the ladder is observable. Production defaults are
-# alert at 0 and drain at 60m.
+# The defaults, written out. Drain takes the node out of service until an
+# admin runs `scontrol update NodeName=<node> State=RESUME`; this tool never
+# resumes nodes.
 stages:
   - after: 0s
     verdict: alert
-  - after: 30s
+  - after: 60m
     verdict: drain
+  # Cancel is off by default. It needs mode: enforce, a confirmed drain at
+  # least one window earlier, and a signature listed below.
+  # - after: 4h
+  #   verdict: cancel
+
+# Signatures a cancel stage applies to. hung also describes a long checkpoint
+# write, so add it only deliberately.
+allow_cancel_signatures: [idle]
 
 exemptions:
-  # carol's eval sweeps are known-bursty; exempting her proves the path works.
-  users: [carol]
+  users: []
+  accounts: []
+  partitions: []
+  qos: []
+  # name_pattern: "^(debug|jupyter)-"
 
 slack:
   webhook_env: SLACK_WEBHOOK_URL
   min_verdict: alert
+  remind_every: 4h       # repeat an unchanged finding this often; 0 = never
